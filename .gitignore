@@ -1,0 +1,13 @@
+.python-version
+venv/
+.vscode/
+.venv/
+_pycache_/
+*.pyc
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+instance/
