@@ -36,3 +36,22 @@ def create_category(user):
         db.session.rollback()
         return error("You already have a category with that name.", 409)
     return category_schema.dump(category), 201
+
+@app.route("/categories/<int:id>", methods=["PATCH"])
+@login_required
+def update_category(id, user):
+    category = own_category(user, id)
+    if category is None:
+        return error("Category not found.", 404)
+    try:
+        data = category_schema.load(get_json(), partial=True)
+    except ValidationError as err:
+        return error("Validation failed.", 422, details=err.messages)
+    if "name" in data:
+        category.name = data["name"].strip()
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return error("You already have a category with that name.", 409)
+    return category_schema.dump(category), 200
