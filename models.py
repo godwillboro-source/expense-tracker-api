@@ -1,7 +1,6 @@
 from datetime import date
 
-from app import db, bcrypt
-from flask_sqlalchemy import SQLAlchemy
+from config import bcrypt, db
 from sqlalchemy import MetaData
 from sqlalchemy.ext.hybrid import hybrid_property
 
