@@ -55,3 +55,13 @@ def update_category(id, user):
         db.session.rollback()
         return error("You already have a category with that name.", 409)
     return category_schema.dump(category), 200
+
+@app.route("/categories/<int:id>", methods=["DELETE"])
+@login_required
+def delete_category(id, user):
+    category = own_category(user, id)
+    if category is None:
+        return error("Category not found.", 404)
+    db.session.delete(category)  
+    db.session.commit()
+    return "", 204
