@@ -2,7 +2,8 @@ from functools import wraps
 
 from flask import request, session
 
-from models import User, db
+from models import User
+from config import db
 
 
 def error(message, status, **extra):
@@ -20,10 +21,12 @@ def current_user():
 
 def login_required(view):
     """Return 401 unless a user is logged in; passes the user to the route."""
+
     @wraps(view)
     def wrapper(*args, **kwargs):
         user = current_user()
         if user is None:
             return error("Unauthorized. Please log in.", 401)
         return view(*args, user=user, **kwargs)
+
     return wrapper

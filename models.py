@@ -4,14 +4,17 @@ from sqlalchemy.exc import IntegrityError
 
 from app import app
 from helpers import current_user, error, get_json
-from models import User, db
+from models import User
+from config import db
 
 
 class UserSchema(Schema):
     id = fields.Int(dump_only=True)
     username = fields.Str(required=True, validate=validate.Length(min=3, max=50))
     # load_only: accepted on input, never returned.
-    password = fields.Str(required=True, load_only=True, validate=validate.Length(min=8, max=128))
+    password = fields.Str(
+        required=True, load_only=True, validate=validate.Length(min=8, max=128)
+    )
 
 
 user_schema = UserSchema()
