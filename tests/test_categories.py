@@ -16,3 +16,11 @@ def test_category_names_unique_per_user(client, other_client):
     assert client.post("/categories", json={"name": "Food"}).status_code == 201
     assert client.post("/categories", json={"name": "Food"}).status_code == 409
     assert other_client.post("/categories", json={"name": "Food"}).status_code == 201
+
+def test_users_cannot_touch_each_others_categories(client, other_client):
+    signup(client, "alice")
+    signup(other_client, "bob")
+    cat = client.post("/categories", json={"name": "Food"}).json
+    assert other_client.get("/categories").json == []
+    assert other_client.patch(f"/categories/{cat['id']}", json={"name": "x"}).status_code == 404
+    assert other_client.delete(f"/categories/{cat['id']}").status_code == 404
