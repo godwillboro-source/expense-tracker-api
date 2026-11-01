@@ -1,9 +1,10 @@
 from flask import request
 from marshmallow import Schema, ValidationError, fields, validate, validates
 
-from app import app, db 
+from app import app
 from helpers import error, get_json, login_required
 from models import Category, Expense
+from config import db 
 
 
 class ExpenseSchema(Schema):
