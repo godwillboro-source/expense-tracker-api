@@ -12,6 +12,7 @@ marshmallow = "*"
 sqlalchemy = "*"
 
 [dev-packages]
+pytest = "*"
 
 [requires]
 python_version = "3.14"

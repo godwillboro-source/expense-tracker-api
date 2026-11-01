@@ -5,12 +5,9 @@ from flask import Flask, request, session
 from flask_migrate import Migrate
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
-from flask_bcrypt import Bcrypt
-from flask_sqlalchemy import SQLAlchemy
 
-
-db = SQLAlchemy()
-bcrypt = Bcrypt()
+from config import bcrypt, db
+from models import User, Category, Expense
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI", "sqlite:///app.db")
