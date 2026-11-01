@@ -13,8 +13,26 @@ category_schema = CategorySchema()
 def own_category(user, category_id):
     return Category.query.filter_by(id=category_id, user_id=user.id).first()
 
+
 @app.route("/categories", methods=["GET"])
 @login_required
 def list_categories(user):
     categories = Category.query.filter_by(user_id=user.id).order_by(Category.name).all()
     return category_schema.dump(categories, many=True), 200
+
+
+@app.route("/categories", methods=["POST"])
+@login_required
+def create_category(user):
+    try:
+        data = category_schema.load(get_json())
+    except ValidationError as err:
+        return error("Validation failed.", 422, details=err.messages)
+    category = Category(name=data["name"].strip(), user_id=user.id)
+    db.session.add(category)
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return error("You already have a category with that name.", 409)
+    return category_schema.dump(category), 201
