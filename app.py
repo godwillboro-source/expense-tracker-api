@@ -1,16 +1,9 @@
 import os
-from functools import wraps
 
-from flask import Flask, request, session
+from flask import Flask
 from flask_migrate import Migrate
-from marshmallow import ValidationError
-from sqlalchemy.exc import IntegrityError
-from flask_bcrypt import Bcrypt
-from flask_sqlalchemy import SQLAlchemy
 
-
-db = SQLAlchemy()
-bcrypt = Bcrypt()
+from models import bcrypt, db
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI", "sqlite:///app.db")
@@ -21,5 +14,11 @@ db.init_app(app)
 bcrypt.init_app(app)
 migrate = Migrate(app, db)
 
-if __name__ == "__main__":
-    app.run(port=5555, debug=True)
+# Route modules are imported last because they need `app` to exist.
+
+import routes.auth
+
+
+import routes.expenses
+
+import routes.categories
