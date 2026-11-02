@@ -40,16 +40,16 @@ with app.app_context():
     print("seeding expense data...")
     expenses = [
         # alice's expenses
-        Expense(title="Groceries", amount=54.20, date=date(2026, 10, 27), user_id=alice.id, category_id=alice_food.id),
-        Expense(title="Lunch", amount=12.50, date=date(2026, 10, 28), user_id=alice.id, category_id=alice_food.id),
-        Expense(title="Bus fare", amount=3.00, date=date(2026, 10, 28), user_id=alice.id, category_id=alice_transport.id),
-        Expense(title="Fuel", amount=40.00, date=date(2026, 10, 29), user_id=alice.id, category_id=alice_transport.id),
-        Expense(title="Electricity", amount=78.90, date=date(2026, 10, 30), user_id=alice.id, category_id=alice_bills.id),
-        Expense(title="Birthday gift", amount=25.00, date=date(2026, 10, 30), user_id=alice.id),  # no category
+        Expense(title="Groceries", amount=6500, date=date(2026, 10, 27), user_id=alice.id, category_id=alice_food.id),
+        Expense(title="Lunch", amount=3500, date=date(2026, 10, 28), user_id=alice.id, category_id=alice_food.id),
+        Expense(title="Bus fare", amount=300, date=date(2026, 10, 28), user_id=alice.id, category_id=alice_transport.id),
+        Expense(title="Fuel", amount=4000, date=date(2026, 10, 29), user_id=alice.id, category_id=alice_transport.id),
+        Expense(title="Electricity", amount=7890, date=date(2026, 10, 30), user_id=alice.id, category_id=alice_bills.id),
+        Expense(title="Birthday gift", amount=2500, date=date(2026, 10, 30), user_id=alice.id),  # no category
         # bob's expenses
-        Expense(title="Coffee", amount=4.75, date=date(2026, 10, 27), user_id=bob.id, category_id=bob_food.id),
-        Expense(title="Dinner out", amount=36.40, date=date(2026, 10, 29), user_id=bob.id, category_id=bob_food.id),
-        Expense(title="Movie night", amount=15.00, date=date(2026, 10, 30), user_id=bob.id, category_id=bob_fun.id),
+        Expense(title="Coffee", amount=475, date=date(2026, 10, 27), user_id=bob.id, category_id=bob_food.id),
+        Expense(title="Dinner out", amount=3640, date=date(2026, 10, 29), user_id=bob.id, category_id=bob_food.id),
+        Expense(title="Movie night", amount=1500, date=date(2026, 10, 30), user_id=bob.id, category_id=bob_fun.id),
     ]
 
     db.session.add_all(expenses)
