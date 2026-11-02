@@ -1,6 +1,5 @@
 
 
-
 from datetime import date
 
 from app import app
