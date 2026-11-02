@@ -15,7 +15,7 @@ class ExpenseSchema(Schema):
     category_id = fields.Int(allow_none=True)
 
     @validates("amount")
-    def validate_amount(self, value):
+    def validate_amount(self, value, **kwargs):
         if value <= 0:
             raise ValidationError("Amount must be greater than 0.")
 

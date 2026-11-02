@@ -1,4 +1,4 @@
-from conftest import signup
+from tests.conftest import signup
 
 def test_category_crud(client):
     signup(client, "kim")
