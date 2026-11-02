@@ -62,7 +62,7 @@ Windows PowerShell: use `$env:FLASK_APP = "app.py"` instead of `export`.
 flask run --port 5555
 ```
 
-The API is now at `http://localhost:5555`.
+The API is now at `http://127.0.0.1:5555`.
 
 ## Demo data
 
@@ -152,44 +152,44 @@ Errors come back as `{"error": "message"}`, and validation errors also include a
 
 ```bash
 # Sign up (this also logs you in)
-curl -c cookies.txt -X POST http://localhost:5555/signup \
+curl -c cookies.txt -X POST http://127.0.0.1:5555/signup \
   -H "Content-Type: application/json" \
   -d '{"username": "kim", "password": "password123"}'
 
 # Create a category
-curl -b cookies.txt -X POST http://localhost:5555/categories \
+curl -b cookies.txt -X POST http://127.0.0.1:5555/categories \
   -H "Content-Type: application/json" \
   -d '{"name": "Food"}'
 
 # Add an expense
-curl -b cookies.txt -X POST http://localhost:5555/expenses \
+curl -b cookies.txt -X POST http://127.0.0.1:5555/expenses \
   -H "Content-Type: application/json" \
   -d '{"title": "Lunch", "amount": 12.5, "category_id": 1}'
 
 # List expenses
-curl -b cookies.txt "http://localhost:5555/expenses?page=1&per_page=10"
+curl -b cookies.txt "http://127.0.0.1:5555/expenses?page=1&per_page=10"
 
 # Log out, then try again: you should get 401
-curl -b cookies.txt -X DELETE http://localhost:5555/logout
-curl -b cookies.txt http://localhost:5555/expenses
+curl -b cookies.txt -X DELETE http://127.0.0.1:5555/logout
+curl -b cookies.txt http://127.0.0.1:5555/expenses
 ```
 ## Try with Postman
 Test with Postman
 
 Postman stores the session cookie after you log in, so later requests are logged in automatically.
 
-Setup: start the server (flask run --port 5555), create a collection, and add a variable baseUrl = http://localhost:5555. For requests with a body, choose Body > raw > JSON.
+Setup: start the server (flask run --port 5555), create a collection, and add a variable baseUrl = http://127.0.0.1:5555. For requests with a body, choose Body > raw > JSON.
 
 | Step | Request | Body | Expect |
 |------|---------|------|--------|
-| Sign up (logs you in) | POST {{baseUrl}}/signup | {"username": "kim", "password": "password123"} | 201 |
-| Check session	| GET {{baseUrl}}/check_session | none | 200 |
-| Add category | POST {{baseUrl}}/categories | {"name": "Food"} | 201 |
-| Add expense | POST {{baseUrl}}/expenses | {"title": "Lunch", "amount": 12.5, "category_id": 1} | 201 |
-| List (paginated) | GET {{baseUrl}}/expenses?page=1&per_page=10 | none | 200 |
-| Update | PATCH {{baseUrl}}/expenses/1	 | {"amount": 15} | 200 |
-| Delete | DELETE {{baseUrl}}/expenses/1 | none | 204  | 
-| Log out | DELETE {{baseUrl}}/logout | none | 204 |, then /expenses gives 401
+| Sign up (logs you in) | POST http://127.0.0.1:5555/signup | {"username": "kim", "password": "password123"} | 201 |
+| Check session	| GET http://127.0.0.1:5555/check_session | none | 200 |
+| Add category | POST http://127.0.0.1:5555/categories | {"name": "Food"} | 201 |
+| Add expense | POST http://127.0.0.1:5555/expenses | {"title": "Lunch", "amount": 12.5, "category_id": 1} | 201 |
+| List (paginated) | GET http://127.0.0.1:5555/expenses?page=1&per_page=10 | none | 200 |
+| Update | PATCH http://127.0.0.1:5555/expenses/1	 | {"amount": 15} | 200 |
+| Delete | DELETE http://127.0.0.1:5555/expenses/1 | none | 204  |
+| Log out | DELETE http://127.0.0.1:5555/logout | none | 204 |, then /expenses gives 401
 
 ## How authentication and security work
 
