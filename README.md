@@ -129,8 +129,9 @@ Rules: `title` is required (up to 100 characters), `amount` is required and must
 | Method | Path | Body | Success | Errors |
 |--------|------|------|---------|--------|
 | GET | `/categories` | none | 200, list of your categories | none |
+| GET | `/categories/<id>` | none | 200 and the category | 404 |
 | POST | `/categories` | `{name}` | 201 and the category | 409 duplicate name, 422 invalid |
-| PATCH | `/categories/<id>` | `{name}` | 200 and the updated category | 404, 409, 422 |
+| PATCH | `/categories/<id>` | `{name}` | 200 and the updated category | 403 not authorized, 404, 409, 422 |
 | DELETE | `/categories/<id>` | none | 204 | 404 |
 
 ### Status codes
@@ -140,7 +141,8 @@ Rules: `title` is required (up to 100 characters), `amount` is required and must
 | 200 / 201 / 204 | Success / created / deleted with no body |
 | 400 | Bad query parameters, such as `page=abc` |
 | 401 | Not logged in, or wrong username or password |
-| 404 | Not found, or it belongs to another user |
+| 403 | The category exists but belongs to another user |
+| 404 | Not found, or belongs to another user on endpoints that conceal ownership |
 | 409 | Duplicate username or category name |
 | 422 | The data failed validation |
 
