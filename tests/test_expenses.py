@@ -32,6 +32,27 @@ def test_pagination(client):
     assert client.get("/expenses?page=abc").status_code == 400
 
 
+def test_list_expenses_in_category(client):
+    signup(client, "kim")
+    food = client.post("/categories", json={"name": "Food"}).json
+    travel = client.post("/categories", json={"name": "Travel"}).json
+
+    food_expense = client.post(
+        "/expenses",
+        json={"title": "Lunch", "amount": 12.5, "category_id": food["id"]},
+    ).json
+    client.post(
+        "/expenses",
+        json={"title": "Train", "amount": 20, "category_id": travel["id"]},
+    )
+    client.post("/expenses", json={"title": "Coffee", "amount": 3})
+
+    response = client.get(f"/categories/{food['id']}/expenses")
+    assert response.status_code == 200
+    assert response.json["total"] == 1
+    assert response.json["items"] == [food_expense]
+
+
 def test_users_cannot_touch_each_others_expenses(client, other_client):
     signup(client, "alice")
     signup(other_client, "bob")
@@ -50,3 +71,5 @@ def test_cannot_use_someone_elses_category(client, other_client):
     cat = client.post("/categories", json={"name": "Food"}).json
     res = other_client.post("/expenses", json={"title": "x", "amount": 1, "category_id": cat["id"]})
     assert res.status_code == 422
+    assert other_client.get(f"/categories/{cat['id']}/expenses").status_code == 404
+    assert client.get("/categories/999/expenses").status_code == 404
