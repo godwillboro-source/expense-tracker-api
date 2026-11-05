@@ -61,6 +61,35 @@ def list_expenses(user):
     }, 200
 
 
+@app.route("/categories/<int:category_id>/expenses", methods=["GET"])
+@login_required
+def list_category_expenses(category_id, user):
+    category = Category.query.filter_by(id=category_id, user_id=user.id).first()
+    if category is None:
+        return error("Category not found.", 404)
+
+    try:
+        page = int(request.args.get("page", 1))
+        per_page = int(request.args.get("per_page", 10))
+    except ValueError:
+        return error("page and per_page must be integers.", 400)
+    if page < 1 or per_page < 1:
+        return error("page and per_page must be positive.", 400)
+
+    pagination = (
+        Expense.query.filter_by(category_id=category.id, user_id=user.id)
+        .order_by(Expense.date.desc(), Expense.id.desc())
+        .paginate(page=page, per_page=min(per_page, 100), error_out=False)
+    )
+    return {
+        "items": expense_schema.dump(pagination.items, many=True),
+        "page": pagination.page,
+        "per_page": pagination.per_page,
+        "total": pagination.total,
+        "pages": pagination.pages,
+    }, 200
+
+
 @app.route("/expenses", methods=["POST"])
 @login_required
 def create_expense(user):

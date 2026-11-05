@@ -103,6 +103,7 @@ Rules: username is 3 to 50 characters, password is 8 to 128 characters.
 | Method | Path | Body or query | Success | Errors |
 |--------|------|---------------|---------|--------|
 | GET | `/expenses?page=1&per_page=10` | query: `page`, `per_page` | 200, paginated list | 400 bad page values |
+| GET | `/categories/<id>/expenses?page=1&per_page=10` | query: `page`, `per_page` | 200, paginated expenses for your category | 400 bad page values, 404 category not found |
 | POST | `/expenses` | `{title, amount, date?, category_id?}` | 201 and the expense | 422 invalid |
 | GET | `/expenses/<id>` | none | 200 and the expense | 404 |
 | PATCH | `/expenses/<id>` | any subset of the fields above | 200 and the updated expense | 404, 422 |
