@@ -20,6 +20,14 @@ def list_categories(user):
     categories = Category.query.filter_by(user_id=user.id).order_by(Category.name).all()
     return category_schema.dump(categories, many=True), 200
 
+@app.route("/categories/<int:id>", methods=["GET"])
+@login_required
+def get_category(id, user):
+    category = own_category(user, id)
+    if category is None:
+        return error("Category not found.", 404)
+    return category_schema.dump(category), 200
+
 
 @app.route("/categories", methods=["POST"])
 @login_required
@@ -40,9 +48,11 @@ def create_category(user):
 @app.route("/categories/<int:id>", methods=["PATCH"])
 @login_required
 def update_category(id, user):
-    category = own_category(user, id)
+    category = Category.query.filter_by(id=id).first()
     if category is None:
         return error("Category not found.", 404)
+    if category.user_id != user.id:
+        return error("You are not authorized to update this category.", 403)
     try:
         data = category_schema.load(get_json(), partial=True)
     except ValidationError as err:
